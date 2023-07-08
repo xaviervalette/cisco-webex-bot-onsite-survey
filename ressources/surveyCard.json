@@ -1,0 +1,90 @@
+{
+    "contentType": "application/vnd.microsoft.card.adaptive",
+    "content": {
+        "type": "AdaptiveCard",
+        "body": [
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "items": [
+                            {
+                                "type": "Image",
+                                "style": "Default",
+                                "url": "https://miro.medium.com/v2/resize:fit:600/1*kLQyKjBC8l6C33_1WjGoAw.gif",
+                                "height": "80px",
+                                "spacing": "None"
+                            }
+                        ],
+                        "width": "auto"
+                    },
+                    {
+                        "type": "Column",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "La team ULTEAM",
+                                "wrap": true
+                            },
+                            {
+                                "type": "TextBlock",
+                                "weight": "Bolder",
+                                "text": "Quand serez-vous à ULTEAM la semaine prochaine ?",
+                                "horizontalAlignment": "Left",
+                                "wrap": true,
+                                "color": "Accent",
+                                "size": "Large",
+                                "spacing": "Small",
+                                "isSubtle": false
+                            }
+                        ],
+                        "width": "stretch"
+                    }
+                ]
+            },
+            {
+                "type": "Input.Toggle",
+                "title": "Lundi",
+                "id": "lundi",
+                "spacing": "ExtraLarge",
+                "separator": true
+            },
+            {
+                "type": "Input.Toggle",
+                "title": "Mardi",
+                "id": "mardi"
+            },
+            {
+                "type": "Input.Toggle",
+                "title": "Mercredi",
+                "id": "mercredi"
+            },
+            {
+                "type": "Input.Toggle",
+                "title": "Jeudi",
+                "id": "jeudi"
+            },
+            {
+                "type": "Input.Toggle",
+                "title": "Vendredi",
+                "id": "vendredi"
+            },
+            {
+                "type": "ActionSet",
+                "actions": [
+                    {
+                        "type": "Action.Submit",
+                        "title": "Soumettre",
+                        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eo_circle_light-green_checkmark.svg/2048px-Eo_circle_light-green_checkmark.svg.png"
+                    }
+                ],
+                "horizontalAlignment": "Center",
+                "spacing": "Large",
+                "separator": true
+            }
+        ],
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3"
+    }
+}

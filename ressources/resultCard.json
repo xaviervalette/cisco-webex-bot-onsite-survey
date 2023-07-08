@@ -1,0 +1,218 @@
+{
+    "contentType": "application/vnd.microsoft.card.adaptive",
+    "content": {
+        "type": "AdaptiveCard",
+        "body": [
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "items": [
+                            {
+                                "type": "Image",
+                                "url": "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
+                                "height": "80px",
+                                "spacing": "None"
+                            }
+                        ],
+                        "width": "auto"
+                    },
+                    {
+                        "type": "Column",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "La team ULTEAM",
+                                "wrap": true
+                            },
+                            {
+                                "type": "TextBlock",
+                                "weight": "Bolder",
+                                "text": "Voici qui sera à ULTEAM semaine prochaine!",
+                                "horizontalAlignment": "Left",
+                                "wrap": true,
+                                "color": "Accent",
+                                "size": "Large",
+                                "spacing": "Small",
+                                "isSubtle": false
+                            }
+                        ],
+                        "width": "stretch"
+                    }
+                ]
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": 40,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Lundi",
+                                "wrap": true,
+                                "spacing": "None",
+                                "size": "Medium"
+                            },
+                            {
+                                "type": "Image",
+                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                "width": "50px",
+                                "height": "10px",
+                                "spacing": "None"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": 60,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Xavier VALETTE, Claire MARTIN, Louise CAILLAT, Marion VAILLER, Jean-Paul TEST",
+                                "wrap": true,
+                                "size": "Small",
+                                "fontType": "Default",
+                                "color": "Accent"
+                            }
+                        ]
+                    }
+                ],
+                "horizontalAlignment": "Left",
+                "style": "default",
+                "minHeight": "1px"
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": 40,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Mardi",
+                                "wrap": true,
+                                "spacing": "None",
+                                "size": "Medium"
+                            },
+                            {
+                                "type": "Image",
+                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                "height": "10px",
+                                "width": "12px",
+                                "spacing": "None"
+                            }
+                        ],
+                        "horizontalAlignment": "Left"
+                    },
+                    {
+                        "type": "Column",
+                        "width": 60,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Test",
+                                "wrap": true,
+                                "size": "Small",
+                                "fontType": "Default",
+                                "color": "Accent"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": 40,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Mercredi",
+                                "wrap": true,
+                                "spacing": "None",
+                                "size": "Medium"
+                            },
+                            {
+                                "type": "Image",
+                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                "height": "10px",
+                                "width": "50px",
+                                "spacing": "None"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": 60
+                    }
+                ]
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": 40,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Jeudi",
+                                "wrap": true,
+                                "spacing": "None",
+                                "size": "Medium"
+                            },
+                            {
+                                "type": "Image",
+                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                "height": "10px",
+                                "width": "100px",
+                                "spacing": "None"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": 60
+                    }
+                ]
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": 40,
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Vendredi",
+                                "wrap": true,
+                                "spacing": "None",
+                                "size": "Medium"
+                            },
+                            {
+                                "type": "Image",
+                                "height": "10px",
+                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                "width": "30px",
+                                "spacing": "None"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": 60
+                    }
+                ]
+            }
+        ],
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.3"
+    }
+}
