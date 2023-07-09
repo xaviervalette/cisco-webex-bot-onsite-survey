@@ -29,12 +29,12 @@
                             {
                                 "type": "TextBlock",
                                 "weight": "Bolder",
-                                "text": "Voici qui sera à ULTEAM semaine prochaine!",
+                                "text": "Voici qui sera à ULTEAM semaine prochaine, bon week-end !",
                                 "horizontalAlignment": "Left",
                                 "wrap": true,
                                 "color": "Accent",
                                 "size": "Large",
-                                "spacing": "Small",
+                                "spacing": "None",
                                 "isSubtle": false
                             }
                         ],
@@ -43,171 +43,211 @@
                 ]
             },
             {
-                "type": "ColumnSet",
-                "columns": [
+                "type": "Container",
+                "separator": true,
+                "items": [
                     {
-                        "type": "Column",
-                        "width": 40,
-                        "items": [
+                        "type": "ColumnSet",
+                        "columns": [
                             {
-                                "type": "TextBlock",
-                                "text": "Lundi",
-                                "wrap": true,
-                                "spacing": "None",
-                                "size": "Medium"
+                                "type": "Column",
+                                "width": 40,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Lundi",
+                                        "wrap": true,
+                                        "spacing": "None",
+                                        "size": "Medium",
+                                        "id": "lundi"
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                        "width": "50px",
+                                        "height": "10px",
+                                        "spacing": "None"
+                                    }
+                                ]
                             },
                             {
-                                "type": "Image",
-                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                "width": "50px",
-                                "height": "10px",
-                                "spacing": "None"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "Column",
-                        "width": 60,
-                        "items": [
-                            {
-                                "type": "TextBlock",
-                                "text": "Xavier VALETTE, Claire MARTIN, Louise CAILLAT, Marion VAILLER, Jean-Paul TEST",
-                                "wrap": true,
-                                "size": "Small",
-                                "fontType": "Default",
-                                "color": "Accent"
-                            }
-                        ]
-                    }
-                ],
-                "horizontalAlignment": "Left",
-                "style": "default",
-                "minHeight": "1px"
-            },
-            {
-                "type": "ColumnSet",
-                "columns": [
-                    {
-                        "type": "Column",
-                        "width": 40,
-                        "items": [
-                            {
-                                "type": "TextBlock",
-                                "text": "Mardi",
-                                "wrap": true,
-                                "spacing": "None",
-                                "size": "Medium"
-                            },
-                            {
-                                "type": "Image",
-                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                "height": "10px",
-                                "width": "12px",
-                                "spacing": "None"
+                                "type": "Column",
+                                "width": 60,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Xavier VALETTE, Claire MARTIN, Louise CAILLAT, Marion VAILLER, Jean-Paul TEST",
+                                        "wrap": true,
+                                        "size": "Small",
+                                        "fontType": "Default",
+                                        "color": "Accent"
+                                    }
+                                ]
                             }
                         ],
-                        "horizontalAlignment": "Left"
+                        "horizontalAlignment": "Left",
+                        "style": "default",
+                        "minHeight": "1px",
+                        "separator": true
                     },
                     {
-                        "type": "Column",
-                        "width": 60,
-                        "items": [
+                        "type": "ColumnSet",
+                        "columns": [
                             {
-                                "type": "TextBlock",
-                                "text": "Test",
-                                "wrap": true,
-                                "size": "Small",
-                                "fontType": "Default",
-                                "color": "Accent"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "ColumnSet",
-                "columns": [
-                    {
-                        "type": "Column",
-                        "width": 40,
-                        "items": [
-                            {
-                                "type": "TextBlock",
-                                "text": "Mercredi",
-                                "wrap": true,
-                                "spacing": "None",
-                                "size": "Medium"
+                                "type": "Column",
+                                "width": 40,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Mardi",
+                                        "wrap": true,
+                                        "spacing": "None",
+                                        "size": "Medium",
+                                        "id": "mardi"
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                        "height": "10px",
+                                        "width": "12px",
+                                        "spacing": "None"
+                                    }
+                                ],
+                                "horizontalAlignment": "Left"
                             },
                             {
-                                "type": "Image",
-                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                "height": "10px",
-                                "width": "50px",
-                                "spacing": "None"
+                                "type": "Column",
+                                "width": 60,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Xavier VALETTE",
+                                        "wrap": true,
+                                        "size": "Small",
+                                        "fontType": "Default",
+                                        "color": "Accent"
+                                    }
+                                ]
                             }
                         ]
                     },
                     {
-                        "type": "Column",
-                        "width": 60
-                    }
-                ]
-            },
-            {
-                "type": "ColumnSet",
-                "columns": [
-                    {
-                        "type": "Column",
-                        "width": 40,
-                        "items": [
+                        "type": "ColumnSet",
+                        "columns": [
                             {
-                                "type": "TextBlock",
-                                "text": "Jeudi",
-                                "wrap": true,
-                                "spacing": "None",
-                                "size": "Medium"
+                                "type": "Column",
+                                "width": 40,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Mercredi",
+                                        "wrap": true,
+                                        "spacing": "None",
+                                        "size": "Medium",
+                                        "id": "mercredi"
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                        "height": "10px",
+                                        "width": "50px",
+                                        "spacing": "None"
+                                    }
+                                ]
                             },
                             {
-                                "type": "Image",
-                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                "height": "10px",
-                                "width": "100px",
-                                "spacing": "None"
+                                "type": "Column",
+                                "width": 60,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Xavier VALETTE",
+                                        "wrap": true,
+                                        "size": "Small",
+                                        "color": "Accent"
+                                    }
+                                ]
                             }
                         ]
                     },
                     {
-                        "type": "Column",
-                        "width": 60
-                    }
-                ]
-            },
-            {
-                "type": "ColumnSet",
-                "columns": [
-                    {
-                        "type": "Column",
-                        "width": 40,
-                        "items": [
+                        "type": "ColumnSet",
+                        "columns": [
                             {
-                                "type": "TextBlock",
-                                "text": "Vendredi",
-                                "wrap": true,
-                                "spacing": "None",
-                                "size": "Medium"
+                                "type": "Column",
+                                "width": 40,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Jeudi",
+                                        "wrap": true,
+                                        "spacing": "None",
+                                        "size": "Medium",
+                                        "id": "jeudi"
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                        "height": "10px",
+                                        "width": "100px",
+                                        "spacing": "None"
+                                    }
+                                ]
                             },
                             {
-                                "type": "Image",
-                                "height": "10px",
-                                "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                "width": "30px",
-                                "spacing": "None"
+                                "type": "Column",
+                                "width": 60,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Claire MARTIN",
+                                        "wrap": true,
+                                        "spacing": "Small",
+                                        "size": "Small",
+                                        "color": "Accent"
+                                    }
+                                ]
                             }
                         ]
                     },
                     {
-                        "type": "Column",
-                        "width": 60
+                        "type": "ColumnSet",
+                        "columns": [
+                            {
+                                "type": "Column",
+                                "width": 40,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Vendredi",
+                                        "wrap": true,
+                                        "spacing": "None",
+                                        "size": "Medium",
+                                        "id": "vendredi"
+                                    },
+                                    {
+                                        "type": "Image",
+                                        "height": "10px",
+                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
+                                        "width": "30px",
+                                        "spacing": "None"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Column",
+                                "width": 60,
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Xavier VALETTE, Claire MARTIN",
+                                        "wrap": true,
+                                        "color": "Accent",
+                                        "size": "Small"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }

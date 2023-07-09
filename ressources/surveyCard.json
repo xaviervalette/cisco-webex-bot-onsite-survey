@@ -11,8 +11,7 @@
                         "items": [
                             {
                                 "type": "Image",
-                                "style": "Default",
-                                "url": "https://miro.medium.com/v2/resize:fit:600/1*kLQyKjBC8l6C33_1WjGoAw.gif",
+                                "url": "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
                                 "height": "80px",
                                 "spacing": "None"
                             }
@@ -35,7 +34,7 @@
                                 "wrap": true,
                                 "color": "Accent",
                                 "size": "Large",
-                                "spacing": "Small",
+                                "spacing": "None",
                                 "isSubtle": false
                             }
                         ],

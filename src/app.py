@@ -31,6 +31,7 @@ response, status_code = createWebhook("getCardSubmission", getCardSubmissionUrl,
 
 #sendCardToRoomId(config["botToken"], config["destinationRoomId"], surveyCard)
 #sendCardToRoomId(config["botToken"], config["destinationRoomId"], resultCard)
+sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", surveyCard)
 sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", resultCard)
 
 initaliseDB()
@@ -66,34 +67,34 @@ def webhookGet():
 
     if request.method == 'POST':
 
-        #GET END USER INPUTS FROM WEBEX
+        #GET INPUTS FROM WEBEX
         my_date = datetime.date.today()
         _, weekNum, _ = my_date.isocalendar()  # Using isocalendar() function
         data = request.json
         attachement = getAttachement(config["botToken"], data["data"]["id"])
         
-        # Opening JSON file
+        # READ DATABASE
         with open('data/answers.json', 'r') as openfile:
             previousWeeks = json.load(openfile)
-        username = getUsernameFromUserid(config["botToken"], attachement["personId"])
-        team = {"username":username, "isAtUlteam":attachement["inputs"]}
-        i=0
-        #Check if team member already submitted
-        teamMemberAlreadySubmitThisWeek = False
-        for teamMember in previousWeeks[weekNum-1]["team"]:
-            if username == teamMember["username"]:
-                teamMemberAlreadySubmitThisWeek=True
-            else:
-                i=i+1
-        
-        print(teamMemberAlreadySubmitThisWeek)
-        if teamMemberAlreadySubmitThisWeek == True:
-            previousWeeks[weekNum-1]["team"][i] = team
-        else:
-            previousWeeks[weekNum-1]["team"].append(team)
 
+        # REMOVE USERNAME FROM WEEK
+        username = getUsernameFromUserid(config["botToken"], attachement["personId"])
+        for day in  previousWeeks[weekNum-1]["days"]:
+            newLine = [s for s in previousWeeks[weekNum-1]["days"][day] if s != username]
+            previousWeeks[weekNum-1]["days"][day] = newLine
+        
+        # ADD USERNAME IN WEEK
+        for day in attachement["inputs"]:
+            if attachement["inputs"][day] == "true":
+                previousWeeks[weekNum-1]["days"][day].append(username)
+
+        # UPDATE DATABASE
         with open("data/answers.json", "w") as outfile:
             json.dump(previousWeeks, outfile, indent=4)
+
+        # SEND RESULT BACK TO USER
+        populateResultCard(resultCard, previousWeeks, weekNum)
+        sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", resultCard)
 
         return 'success', 200
 
@@ -104,7 +105,12 @@ def webhookGet():
 @app.route("/sendSurvey", methods=['POST'])
 def sendSurvey():
     if request.method == "POST":
-        populateResultCard(resultCard)
+        my_date = datetime.date.today()
+        _, weekNum, _ = my_date.isocalendar()  # Using isocalendar() function
+        # READ DATABASE
+        with open('data/answers.json', 'r') as openfile:
+            previousWeeks = json.load(openfile)
+        populateResultCard(resultCard, previousWeeks, weekNum)
         sendCardToRoomId(config["botToken"], config["destinationRoomId"], resultCard)
 
 """

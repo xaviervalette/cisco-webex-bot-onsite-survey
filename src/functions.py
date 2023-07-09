@@ -3,15 +3,17 @@ import requests
 
 baseUrl = "https://webexapis.com/v1/"
 
-def populateResultCard(resultCard):
+def populateResultCard(resultCard, database, weekNumber):
     resultCardEdited = resultCard
-    print(resultCardEdited["content"]["body"][1]["columns"][1]["items"][0]["text"])
+    for day in resultCardEdited["content"]["body"][1]["items"]:
+        day["columns"][1]["items"][0]["text"] = ', '.join(database[weekNumber-1]["days"][day["columns"][0]["items"][0]["id"]])
+        day["columns"][0]["items"][1]["width"] = str(int(1+100*len(database[weekNumber-1]["days"][day["columns"][0]["items"][0]["id"]])/10))+"px"
     return resultCardEdited
 
 def initaliseDB():
     weeks = []
     for week in range(1, 54):
-        weeks.append({"week":week, "days":{"lundi":[]}})
+        weeks.append({"week":week, "days":{"lundi":[], "mardi":[], "mercredi":[], "jeudi":[], "vendredi":[]}})
     with open("data/answers.json", "w") as outfile:
         json.dump(weeks, outfile, indent=4)
     return weeks
