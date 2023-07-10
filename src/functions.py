@@ -63,6 +63,21 @@ def getRoomsIdBot(token):
 
     return roomsId
 
+# Get the list of room IDs where the bot is a member
+def getRoomName(token, roomId):
+    url = f'https://webexapis.com/v1/rooms/{roomId}'
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.request("GET", url, headers=headers, data={})
+    output = response.json()
+
+    roomName = output["title"]
+    return roomName
+
 # Populate the result card with data
 def populateResultCard(resultCard, database, weekNumber, roomSize, listDays):
     resultCardEdited = resultCard
