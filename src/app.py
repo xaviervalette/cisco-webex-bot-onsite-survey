@@ -27,37 +27,15 @@ getDetailUrl = config["baseWebhookUrl"]+"details"
 
 response = createWebhook("sendCard", sendCardWebhookUrl, "messages", "", config["botToken"])
 response = createWebhook("getDetail", getDetailUrl, "attachmentActions", "", config["botToken"])
-response, status_code = createWebhook("getCardSubmission", getCardSubmissionUrl, "attachmentActions", "", config["botToken"])
+status_code = 0
+while status_code != 200:
+    response, status_code = createWebhook("getCardSubmission", getCardSubmissionUrl, "attachmentActions", "", config["botToken"])
 
-#sendCardToRoomId(config["botToken"], config["destinationRoomId"], surveyCard)
-#sendCardToRoomId(config["botToken"], config["destinationRoomId"], resultCard)
-sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", surveyCard)
-sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", resultCard)
-
-initaliseDB()
+initaliseDB(config["botToken"])
 
 print("\nWebhooks creation output: "+str(status_code)+"\n")
 
 app = Flask(__name__)
-
-"""
-LISTENING ON /webhook/sendCard RESSOURCE FOR HTTP POST (WEBHOOKS)
-"""
-@app.route(config["sendCardWebhookPath"], methods=['POST'])
-def webhookSend():
-
-    # IF THE REQUEST IF POST THEN SEND THE MESSAGE
-    if request.method == 'POST':
-        #GET END USER INPUTS FROM WEBEX
-        data = request.json
-        print(data)
-        print(f"Webex IM received from {data['data']['personEmail']}")
-        return 'success', 200
-
-    # ELSE RETURN A HTTP 400 STATUS CODE
-    else:
-        abort(400)
-
 
 """
 LISTENING ON /webhook/getcardsubmission RESSOURCE FOR HTTP POST (WEBHOOKS)
@@ -69,17 +47,18 @@ def webhookGet():
 
         #GET INPUTS FROM WEBEX
         my_date = datetime.date.today()
-        _, weekNum, _ = my_date.isocalendar()  # Using isocalendar() function
+        _, weekNum, _ = my_date.isocalendar()
         data = request.json
         attachement = getAttachement(config["botToken"], data["data"]["id"])
         
         # READ DATABASE
         with open('data/answers.json', 'r') as openfile:
-            previousWeeks = json.load(openfile)
-
+            previousWeeksAllRooms = json.load(openfile)
+        
+        previousWeeks = previousWeeksAllRooms[data["data"]["roomId"]]["roomResults"]
         # REMOVE USERNAME FROM WEEK
         username = getUsernameFromUserid(config["botToken"], attachement["personId"])
-        for day in  previousWeeks[weekNum-1]["days"]:
+        for day in previousWeeks[weekNum-1]["days"]:
             newLine = [s for s in previousWeeks[weekNum-1]["days"][day] if s != username]
             previousWeeks[weekNum-1]["days"][day] = newLine
         
@@ -87,31 +66,24 @@ def webhookGet():
         for day in attachement["inputs"]:
             if attachement["inputs"][day] == "true":
                 previousWeeks[weekNum-1]["days"][day].append(username)
+        
+        previousWeeksAllRooms[data["data"]["roomId"]]["roomResults"]=previousWeeks
 
         # UPDATE DATABASE
         with open("data/answers.json", "w") as outfile:
-            json.dump(previousWeeks, outfile, indent=4)
+            json.dump(previousWeeksAllRooms, outfile, indent=4)
 
         # SEND RESULT BACK TO USER
-        populateResultCard(resultCard, previousWeeks, weekNum)
-        sendCardToPersonId(config["botToken"], "Y2lzY29zcGFyazovL3VzL1BFT1BMRS82YThjZmMxNy0yYjU1LTRmN2YtYWY5Ny1mYWM1M2I0ZjFlZjU", resultCard)
+        listDays = []
+        listDays = getListDays()
+        populateResultCard(resultCard, previousWeeks, weekNum, getRoomSize(config["botToken"], data["data"]["roomId"]), listDays)
+        sendCardToPersonId(config["botToken"], data["data"]["personId"], resultCard)
 
         return 'success', 200
 
     # ELSE RETURN A HTTP 400 STATUS CODE
     else:
         abort(400)
-
-@app.route("/sendSurvey", methods=['POST'])
-def sendSurvey():
-    if request.method == "POST":
-        my_date = datetime.date.today()
-        _, weekNum, _ = my_date.isocalendar()  # Using isocalendar() function
-        # READ DATABASE
-        with open('data/answers.json', 'r') as openfile:
-            previousWeeks = json.load(openfile)
-        populateResultCard(resultCard, previousWeeks, weekNum)
-        sendCardToRoomId(config["botToken"], config["destinationRoomId"], resultCard)
 
 """
 LISTENING ON LOCALHOST:42101 FOR HTTP POST (WEBHOOKS)

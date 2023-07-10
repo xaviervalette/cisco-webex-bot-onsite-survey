@@ -43,44 +43,47 @@
                 ]
             },
             {
-                "type": "Input.Toggle",
-                "title": "Lundi",
-                "id": "lundi",
-                "spacing": "ExtraLarge",
-                "separator": true
-            },
-            {
-                "type": "Input.Toggle",
-                "title": "Mardi",
-                "id": "mardi"
-            },
-            {
-                "type": "Input.Toggle",
-                "title": "Mercredi",
-                "id": "mercredi"
-            },
-            {
-                "type": "Input.Toggle",
-                "title": "Jeudi",
-                "id": "jeudi"
-            },
-            {
-                "type": "Input.Toggle",
-                "title": "Vendredi",
-                "id": "vendredi"
+                "type": "Container",
+                "items": [
+                    {
+                        "type": "Input.Toggle",
+                        "title": "Lundi",
+                        "id": "lundi",
+                        "spacing": "ExtraLarge",
+                        "separator": true
+                    },
+                    {
+                        "type": "Input.Toggle",
+                        "title": "Mardi",
+                        "id": "mardi"
+                    },
+                    {
+                        "type": "Input.Toggle",
+                        "title": "Mercredi",
+                        "id": "mercredi"
+                    },
+                    {
+                        "type": "Input.Toggle",
+                        "title": "Jeudi",
+                        "id": "jeudi"
+                    },
+                    {
+                        "type": "Input.Toggle",
+                        "title": "Vendredi",
+                        "id": "vendredi"
+                    }
+                ]
             },
             {
                 "type": "ActionSet",
                 "actions": [
                     {
                         "type": "Action.Submit",
-                        "title": "Soumettre",
-                        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eo_circle_light-green_checkmark.svg/2048px-Eo_circle_light-green_checkmark.svg.png"
+                        "title": "Soumettre"
                     }
                 ],
                 "horizontalAlignment": "Center",
-                "spacing": "Large",
-                "separator": true
+                "spacing": "Large"
             }
         ],
         "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",

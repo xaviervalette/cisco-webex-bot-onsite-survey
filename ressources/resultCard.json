@@ -44,7 +44,6 @@
             },
             {
                 "type": "Container",
-                "separator": true,
                 "items": [
                     {
                         "type": "ColumnSet",
@@ -62,25 +61,35 @@
                                         "id": "lundi"
                                     },
                                     {
-                                        "type": "Image",
-                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                        "width": "50px",
-                                        "height": "10px",
+                                        "type": "ColumnSet",
+                                        "columns": [
+                                            {
+                                                "type": "Column",
+                                                "width": 50,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "accent",
+                                                        "spacing": "None",
+                                                        "separator": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Column",
+                                                "width": 50,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "emphasis",
+                                                        "spacing": "None",
+                                                        "separator": true
+                                                    }
+                                                ],
+                                                "spacing": "None"
+                                            }
+                                        ],
                                         "spacing": "None"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Column",
-                                "width": 60,
-                                "items": [
-                                    {
-                                        "type": "TextBlock",
-                                        "text": "Xavier VALETTE, Claire MARTIN, Louise CAILLAT, Marion VAILLER, Jean-Paul TEST",
-                                        "wrap": true,
-                                        "size": "Small",
-                                        "fontType": "Default",
-                                        "color": "Accent"
                                     }
                                 ]
                             }
@@ -106,28 +115,35 @@
                                         "id": "mardi"
                                     },
                                     {
-                                        "type": "Image",
-                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                        "height": "10px",
-                                        "width": "12px",
+                                        "type": "ColumnSet",
+                                        "columns": [
+                                            {
+                                                "type": "Column",
+                                                "width": 50,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "accent",
+                                                        "separator": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Column",
+                                                "width": 50,
+                                                "items": [
+                                                    {
+                                                        "type": "Container"
+                                                    }
+                                                ],
+                                                "style": "emphasis",
+                                                "spacing": "None"
+                                            }
+                                        ],
                                         "spacing": "None"
                                     }
                                 ],
                                 "horizontalAlignment": "Left"
-                            },
-                            {
-                                "type": "Column",
-                                "width": 60,
-                                "items": [
-                                    {
-                                        "type": "TextBlock",
-                                        "text": "Xavier VALETTE",
-                                        "wrap": true,
-                                        "size": "Small",
-                                        "fontType": "Default",
-                                        "color": "Accent"
-                                    }
-                                ]
                             }
                         ]
                     },
@@ -147,24 +163,32 @@
                                         "id": "mercredi"
                                     },
                                     {
-                                        "type": "Image",
-                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                        "height": "10px",
-                                        "width": "50px",
+                                        "type": "ColumnSet",
+                                        "columns": [
+                                            {
+                                                "type": "Column",
+                                                "width": 0,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "accent"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Column",
+                                                "width": 100,
+                                                "spacing": "None",
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "emphasis",
+                                                        "spacing": "None"
+                                                    }
+                                                ]
+                                            }
+                                        ],
                                         "spacing": "None"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Column",
-                                "width": 60,
-                                "items": [
-                                    {
-                                        "type": "TextBlock",
-                                        "text": "Xavier VALETTE",
-                                        "wrap": true,
-                                        "size": "Small",
-                                        "color": "Accent"
                                     }
                                 ]
                             }
@@ -186,25 +210,33 @@
                                         "id": "jeudi"
                                     },
                                     {
-                                        "type": "Image",
-                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                        "height": "10px",
-                                        "width": "100px",
+                                        "type": "ColumnSet",
+                                        "columns": [
+                                            {
+                                                "type": "Column",
+                                                "width": 0,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "accent",
+                                                        "minHeight": "2px"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Column",
+                                                "width": 100,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "spacing": "None",
+                                                        "style": "emphasis"
+                                                    }
+                                                ],
+                                                "spacing": "None"
+                                            }
+                                        ],
                                         "spacing": "None"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Column",
-                                "width": 60,
-                                "items": [
-                                    {
-                                        "type": "TextBlock",
-                                        "text": "Claire MARTIN",
-                                        "wrap": true,
-                                        "spacing": "Small",
-                                        "size": "Small",
-                                        "color": "Accent"
                                     }
                                 ]
                             }
@@ -226,30 +258,148 @@
                                         "id": "vendredi"
                                     },
                                     {
-                                        "type": "Image",
-                                        "height": "10px",
-                                        "url": "https://www.schemecolor.com/wallpaper?i=8713&desktop",
-                                        "width": "30px",
+                                        "type": "ColumnSet",
+                                        "columns": [
+                                            {
+                                                "type": "Column",
+                                                "width": 0,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "accent"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Column",
+                                                "width": 100,
+                                                "items": [
+                                                    {
+                                                        "type": "Container",
+                                                        "style": "emphasis"
+                                                    }
+                                                ],
+                                                "spacing": "None"
+                                            }
+                                        ],
                                         "spacing": "None"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Column",
-                                "width": 60,
-                                "items": [
-                                    {
-                                        "type": "TextBlock",
-                                        "text": "Xavier VALETTE, Claire MARTIN",
-                                        "wrap": true,
-                                        "color": "Accent",
-                                        "size": "Small"
                                     }
                                 ]
                             }
                         ]
                     }
                 ]
+            },
+            {
+                "type": "ActionSet",
+                "actions": [
+                    {
+                        "type": "Action.ShowCard",
+                        "title": "Voir les noms",
+                        "card": {
+                            "type": "AdaptiveCard",
+                            "body": [
+                                {
+                                    "type": "Container",
+                                    "items": [
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Lundi",
+                                            "wrap": true,
+                                            "spacing": "None"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Xavier VALETTE",
+                                            "wrap": true,
+                                            "size": "Small",
+                                            "color": "Accent",
+                                            "spacing": "None",
+                                            "separator": true
+                                        }]},
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Mardi",
+                                            "wrap": true,
+                                            "spacing": "None"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Xavier VALETTE",
+                                            "wrap": true,
+                                            "size": "Small",
+                                            "color": "Accent",
+                                            "spacing": "None",
+                                            "separator": true
+                                        }]},
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Mercredi",
+                                            "wrap": true,
+                                            "spacing": "None"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Xavier VALETTE",
+                                            "wrap": true,
+                                            "size": "Small",
+                                            "color": "Accent",
+                                            "spacing": "None",
+                                            "separator": true
+                                        }]},
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Jeudi",
+                                            "wrap": true,
+                                            "spacing": "None"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Xavier VALETTE",
+                                            "wrap": true,
+                                            "size": "Small",
+                                            "color": "Accent",
+                                            "spacing": "None",
+                                            "separator": true
+                                        }]},
+                                        {
+                                            "type": "Container",
+                                            "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Vendredi",
+                                            "wrap": true,
+                                            "spacing": "None"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "Xavier VALETTE",
+                                            "wrap": true,
+                                            "size": "Small",
+                                            "color": "Accent",
+                                            "spacing": "None",
+                                            "separator": true
+                                        }]}
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "spacing": "Large",
+                "horizontalAlignment": "Center"
             }
         ],
         "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",

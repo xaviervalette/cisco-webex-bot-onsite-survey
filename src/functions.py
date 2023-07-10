@@ -1,23 +1,158 @@
 import json
 import requests
+import locale
+import datetime
 
 baseUrl = "https://webexapis.com/v1/"
 
-def populateResultCard(resultCard, database, weekNumber):
+# Broadcast survey card to all rooms
+def broadcastSurveyCard(token, surveyCard):
+    listDays = []
+    listDays = getListDays()
+    with open('data/answers.json', 'r') as openfile:
+        previousWeeks = json.load(openfile)
+    updateDB(token, previousWeeks)
+    populateSurveyCard(surveyCard, listDays)
+    for roomId, _ in previousWeeks.items():
+        sendCardToRoomId(token,roomId,surveyCard)
+
+# Broadcast result card to all rooms
+def broadcastResultCard(token, resultCard):
+    listDays = []
+    listDays = getListDays()
+
+    my_date = datetime.date.today()
+    _, weekNum, _ = my_date.isocalendar()
+
+    with open('data/answers.json', 'r') as openfile:
+        previousWeeks = json.load(openfile)
+    updateDB(token, previousWeeks)
+    for roomId, _ in previousWeeks.items():
+        resultCardEdited = populateResultCard(resultCard, previousWeeks[roomId]["roomResults"], weekNum, getRoomSize(token, roomId), listDays)
+        sendCardToRoomId(token,roomId,resultCardEdited)
+
+# Get the size of a room (number of members)
+def getRoomSize(token, roomId):
+    url = f'https://webexapis.com/v1/memberships?roomId={roomId}'
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.request("GET", url, headers=headers, data={})
+    output = response.json()
+
+    return len(output["items"])-1
+
+# Get the list of room IDs where the bot is a member
+def getRoomsIdBot(token):
+    url = f'https://webexapis.com/v1/rooms?type=group'
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.request("GET", url, headers=headers, data={})
+    output = response.json()
+
+    roomsId = []
+    for room in output["items"]:
+        roomsId.append(room["id"])
+
+    return roomsId
+
+# Populate the result card with data
+def populateResultCard(resultCard, database, weekNumber, roomSize, listDays):
     resultCardEdited = resultCard
+    i=0
     for day in resultCardEdited["content"]["body"][1]["items"]:
-        day["columns"][1]["items"][0]["text"] = ', '.join(database[weekNumber-1]["days"][day["columns"][0]["items"][0]["id"]])
-        day["columns"][0]["items"][1]["width"] = str(int(1+100*len(database[weekNumber-1]["days"][day["columns"][0]["items"][0]["id"]])/10))+"px"
+
+        # PROGRESS BAR                      
+        day["columns"][0]["items"][1]["columns"][0]["width"] = int(100*len(database[weekNumber-1]["days"][day["columns"][0]["items"][0]["id"]])/roomSize)
+        day["columns"][0]["items"][1]["columns"][1]["width"] = int(100-day["columns"][0]["items"][1]["columns"][0]["width"])
+        day["columns"][0]["items"][0]["text"] = listDays[i]
+        
+        # HANDLE EXCEPTION
+        if (day["columns"][0]["items"][1]["columns"][0]["width"]==0):
+            day["columns"][0]["items"][1]["columns"][0]["width"]=1
+            day["columns"][0]["items"][1]["columns"][1]["width"]=99
+        elif (day["columns"][0]["items"][1]["columns"][1]["width"]==1):
+            day["columns"][0]["items"][1]["columns"][0]["width"]=99
+            day["columns"][0]["items"][1]["columns"][0]["width"]=1
+        i=i+1
+
+    # NAMES
+    i=0
+    for day in resultCardEdited["content"]["body"][2]["actions"][0]["card"]["body"][0]["items"]:
+        day["items"][1]["text"]=', '.join(database[weekNumber-1]["days"][day["items"][0]["text"].lower()])  
+        #day["items"][0]["text"]=listDays[i]
+        i=i+1  
+
     return resultCardEdited
 
-def initaliseDB():
-    weeks = []
-    for week in range(1, 54):
-        weeks.append({"week":week, "days":{"lundi":[], "mardi":[], "mercredi":[], "jeudi":[], "vendredi":[]}})
-    with open("data/answers.json", "w") as outfile:
-        json.dump(weeks, outfile, indent=4)
-    return weeks
+# Get the list of days in French
+def getListDays():
+    listDays=[]
+    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+    today = datetime.date.today()
 
+    # Get the Monday of the week after next
+    next_monday = today + datetime.timedelta(days=(0 - today.weekday())%7+7)
+
+    for i in range(5):
+        current_day = next_monday + datetime.timedelta(days=i)
+        listDays.append(current_day.strftime("%A %d/%m"))
+    return listDays
+
+# Populate the survey card with data
+def populateSurveyCard(surveyCard, listDays):
+    surveyCardEdited = surveyCard
+    i=0
+    for day in surveyCardEdited["content"]["body"][1]["items"]:
+        # NAMES
+        day["title"]=listDays[i]
+        i=i+1
+
+    return surveyCardEdited
+
+# Initialize the database
+def initaliseDB(token):
+    roomsId = getRoomsIdBot(token)
+    rooms = {}
+    roomsResultsPerWeek = []
+    for week in range(1, 54):
+        roomsResultsPerWeek.append({"week":week, "days":{"lundi":[], "mardi":[], "mercredi":[], "jeudi":[], "vendredi":[]}})
+    for roomId in roomsId:
+        #rooms.append({"roomId":roomId, "roomResults":roomsResultsPerWeek})
+        rooms[roomId]={"roomResults":roomsResultsPerWeek}
+    with open("data/answers.json", "w") as outfile:
+        json.dump(rooms, outfile, indent=4)
+    return rooms
+
+# Update the database
+def updateDB(token, previousWeeks):
+    roomsId = getRoomsIdBot(token)
+    print("ROOMS ID =", roomsId)
+    rooms = {}
+    currentRoomsId = []
+    for roomId, _ in previousWeeks.items() :
+        currentRoomsId.append(roomId)
+    roomsResultsPerWeek = []
+    for week in range(1, 54):
+        roomsResultsPerWeek.append({"week":week, "days":{"lundi":[], "mardi":[], "mercredi":[], "jeudi":[], "vendredi":[]}})
+    
+    for roomId in roomsId:
+        if str(roomId) in currentRoomsId:
+            rooms[roomId]=previousWeeks[roomId]
+        else:
+            rooms[roomId]={"roomResults":roomsResultsPerWeek}
+
+    with open("data/answers.json", "w") as outfile:
+        json.dump(rooms, outfile, indent=4)
+
+# Get the username from a user ID
 def getUsernameFromUserid(token, userId):
     url = f'https://webexapis.com/v1/people/{userId}'
     headers = {
@@ -29,8 +164,7 @@ def getUsernameFromUserid(token, userId):
     output = response.json()
     return output["displayName"]
 
-# SEND WEBEX IM MESSAGE 
-
+# Send a message to a room ID
 def sendMessageToRoomId(token, roomId, message):
     url = f"{baseUrl}/messages"
 
@@ -48,7 +182,7 @@ def sendMessageToRoomId(token, roomId, message):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.json()
 
-
+# Send a message to a person ID
 def sendMessageToPersonId(token, personId, message):
 
     url = f"{baseUrl}/messages"
@@ -67,10 +201,7 @@ def sendMessageToPersonId(token, personId, message):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.json()
 
-
-
-# SEND WEBEX CARD
-
+# Send a card to a person ID
 def sendCardToPersonId(token, personId, card):
     url = f"{baseUrl}/messages"
 
@@ -89,7 +220,7 @@ def sendCardToPersonId(token, personId, card):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.json()
 
-
+# Send a card to a room ID
 def sendCardToRoomId(token, roomId, card):
     url = f"{baseUrl}/messages"
 
@@ -109,9 +240,7 @@ def sendCardToRoomId(token, roomId, card):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.json()
 
-
-
-# CREATE WEBHOOK
+# Create a webhook
 def createWebhook(name, targetUrl, ressource, filter, token):
     url = f"{baseUrl}/webhooks"
 
@@ -131,9 +260,7 @@ def createWebhook(name, targetUrl, ressource, filter, token):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.json(), response.status_code
 
-
-
-# LIST WEBHOOK
+# List webhooks
 def listWebhook(token):
     url = f"{baseUrl}/webhooks"
 
@@ -146,9 +273,7 @@ def listWebhook(token):
     response = requests.request("GET", url, headers=headers)
     return response.json()
 
-
-
-# DELETE WEBHOOK
+# Delete a webhook
 def deleteWebhook(token, webhookId):
     url = f"{baseUrl}/webhooks/{webhookId}"
 
@@ -160,9 +285,7 @@ def deleteWebhook(token, webhookId):
 
     response = requests.request("DELETE", url, headers=headers)
 
-
-
-# GET ATTACHEMENT
+# Get an attachment
 def getAttachement(token, attachementId):
     url = f"{baseUrl}/attachment/actions/{attachementId}"
 
@@ -175,238 +298,9 @@ def getAttachement(token, attachementId):
     response = requests.request("GET", url, headers=headers)
     return response.json()
 
-
-
-# DELETE ALL WEBHOOKS
+# Delete all webhooks
 def deleteAllWebhooks(token):
     response = listWebhook(token)
     for webhook in response["items"]:
         webhookId = webhook["id"]
-        deleteWebhook(token, webhookId)
-
-
-
-
-# CHECK IF THE ORDER WAS SHIPPED TO CUSTOMER DIRECTLY 
-def shippedToCustomer(order):
-    output = {}
-    # Check if shipped to customer or not based on the party name 
-    if (order.party == order.shiptoparty):
-        return output
-    else:
-        output["orderWebId"] = order.orderID
-        output["salesOrderNum"] = order.salesordernum
-        output["orderName"] = order.orderName
-        output["detectionCriterias"] = []
-        # If the shipment was not shipped directly to customer, investigate more
-        # Check if the end customer and the partner locations are within the same country   
-        if (order.partyCountry == order.shiptopartyCountry):
-            
-            # Check if the end customer and the partner locations are within the same city   
-            if (order.partyCity == order.shiptopartyCity ):
-                #Same country and city
-                output["detectionCriterias"].append({"name": "Incorrect Destination", "description": "Order not directly shipped to customer", 
-                "details": {"customerName": order.party , "customerAddress": order.partyCountry + ", " + order.partyCity , 
-                "shippedTo": order.shiptoparty, "address": order.shiptopartyCountry + ", " + order.shiptopartyCity}})
-            else:
-                #Same country but different city
-                output["detectionCriterias"].append({"name": "Incorrect Destination", "description": "Order not directly shipped to customer", 
-                "details": {"customerName": order.party , "customerAddress": order.partyCountry + ", " + order.partyCity , 
-                "shippedTo": order.shiptoparty, "address": order.shiptopartyCountry + ", " + order.shiptopartyCity}})
-
-        else:
-            #Different country
-            output["detectionCriterias"].append({"name": "Incorrect Destination", "description": "Order not directly shipped to customer", 
-            "details": {"customerName": order.party , "customerAddress": order.partyCountry, 
-            "shippedTo": order.shiptoparty, "address": order.shiptopartyCountry}})
-            
-        return output
-
-
-
-def getCustomerCountryCode(order):
-    countryCode =""
-    # A list of the countries and their codes (Can add more later)
-    countryList = countriesList()
-
-    # Check the customer country and get its suffix 
-    for country in countryList:
-        if (order.partyCountry.lower() == country["country"]):
-            countryCode = country["code"]
-            return countryCode
-
-
-def checkItems(order, output):
-    incorrectItems = []
-    countryCodes = ["NA", "UK","EU","BR","AR","AU","CN","IN","JP","KR","TW"]
-    itemsWithCountryCode = []
-    customerCountryCode = getCustomerCountryCode(order)
-
-    # Check for items that include a country suffix at the end of their SKU
-    for item in order.orderItems:
-        for code in countryCodes:
-            if (item["sku"][-2:] == code):
-                itemsWithCountryCode.append(item)
-
-    # Check for items that have different suffix than the customer country suffix (for example UK when it should be NA for US)
-    for itemC in itemsWithCountryCode:
-        if (itemC["sku"][-2:] != customerCountryCode):
-            incorrectItems.append({"itemSKU": itemC["sku"], "itemDescription": itemC["description"]})
-
-    if (incorrectItems):
-        output["detectionCriterias"].append({"name": "Ordered Incorrect Items", "description": "Some ordered items include a different suffix than the end customer country suffix", 
-        "details": {"customerCountry": order.partyCountry, "customerCountrySuffix": customerCountryCode,
-            "incorrectItems": incorrectItems}})
-
-    return output
-
-
-def countriesList():
-    countryList = []
-    countries = {
-        "NA": ["United States", "Canada", "Mexico", "Colombia", "Chile"],
-        "UK": ["United Kingdom", "Saudi Arabia", "Qatar", "Kuwait", "Singapore", "Hong Kong", "Malaysia"],
-        "EU": ["European Economic Area", "Switzerland", "Turkey", "Russia", "Ukraine", "Israel", "United Arab Emirates",
-                "Egypt", "South Africa", "Indonesia", "Philippines", "Vietnam", "Thailand"],
-        "BR": ["Brazil"],
-        "AR": ["Argentina"],
-        "AU": ["Australia", "New Zealand"],
-        "CN": ["China"],
-        "IN": ["India"],
-        "JP": ["Japan"],
-        "KR": ["Korea"],
-        "TW": ["Taiwan"],
-    }
-    for key, value in countries.items():
-        for country in value:
-            countryList.append({"country":country.lower(), "code": key})
-    return countryList
-
-
-# This function access CCW API and returns the Order details
-def dropShippingDetection(orderId, clientId, clientSecret, username, password):
-    report = {}
-
-    accessToken = ccwquery.get_access_token(clientId,clientSecret,username,password)
-    orderText = ccwquery.get_order_details(accessToken, str(orderId))
-    order=ccwparser.CCWOrderParser(orderText)
-    # Check if the shipment got shipped to the customer directly or through partner
-    output = shippedToCustomer(order)
-    # Check incorrect items only if the order was not directly shipped to customer
-    if (output):
-        output2 = checkItems(order, output)
-        report = output2
-    else:
-        report = output
-
-    return report
-
-
-# This function creates the structure of the Webex Card 
-def getDetailCard(report, workingPath):
-
-    with open(f'{workingPath}/SRC/responseCard.json', 'r') as json_file:
-        cardResponse= json.load(json_file)
-    
-    with open(f'{workingPath}/SRC/responseCardItem.json', 'r') as json_file:
-        cardResponseItem = json.load(json_file)
-
-    if "detectionCriterias" in report:
-                
-        # If the card contains one criteria 
-        if len(report["detectionCriterias"]) == 1:
-            cardResponse["content"]["body"][0]["columns"][0]["items"][1]["text"] += str(report["orderWebId"])
-            cardResponse["content"]["body"][0]["columns"][0]["items"][2]["text"] += report["detectionCriterias"][0]['description']
-            for k,v in report["detectionCriterias"][0]["details"].items():
-                cardResponse["content"]["body"][0]["columns"][0]["items"][3]["text"] +=  k + " : " + v + "\n"
-            detailCard = cardResponse
-
-        # If the card contains two detections criterias
-        else: 
-
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][1]["text"] += str(report["orderWebId"])
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][2]["text"] += report["detectionCriterias"][0]['description']
- 
-            for k,v in report["detectionCriterias"][0]["details"].items():
-
-                cardResponseItem["content"]["body"][0]["columns"][0]["items"][3]["text"] +=  k + " : " + v + "\n"
-
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][4]["text"] += report["detectionCriterias"][1]['name']
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][5]["text"] += report["detectionCriterias"][1]['description']
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][6]["text"] += str(report["detectionCriterias"][1]['details']['customerCountry'])
-            cardResponseItem["content"]["body"][0]["columns"][0]["items"][7]["text"] += str(report["detectionCriterias"][1]['details']['customerCountrySuffix'])
-
-            for i in report["detectionCriterias"][1]['details']["incorrectItems"]:
-                for k,v in i.items():
-                    cardResponseItem["content"]["body"][0]["columns"][0]["items"][8]["text"] +=  k + " : " + v + "\n"
-                cardResponseItem["content"]["body"][0]["columns"][0]["items"][8]["text"] += "\n"
-            detailCard = cardResponseItem
-    else:
-        print("No detection criteria")
-    return detailCard
-
-
-
-# PROCESS ORDERS DROPSHIPPING DETECTION AND SEND BACK A TABLE REPORT TO THE CUSTOMER
-def sendTableReport(orderIds, clientId, clientSecret, username, password, data, workingPath, token):
-    # CARD
-    with open(f'{workingPath}/SRC/rowSeparator.json', 'r') as json_file:
-        rowSeparator = json.load(json_file)
-    with open(f'{workingPath}/SRC/rowButton.json', 'r') as json_file:
-        rowButton = json.load(json_file)
-    with open(f'{workingPath}/SRC/columnCard.json', 'r') as json_file:
-        columnCard = json.load(json_file)
-
-    noDropShipping =[]
-    histReport = []
-
-    for orderId in orderIds:
-        try:
-            # GET DROPSHIPPING REPORT
-            report = dropShippingDetection(orderId, clientId, clientSecret, username, password)
-            if (report):
-                if(report["orderWebId"] in histReport):
-                    print("already in report")
-                else:
-                    histReport.append(report["orderWebId"])
-                    detailCard = {}
-                    detailCard = getDetailCard(report, workingPath)
-
-                    # ROW STRUCTURE
-                    with open(f'{workingPath}/SRC/row.json', 'r') as json_file:
-                        row = json.load(json_file)
-
-                    # ROW
-                    row["columns"][0]["items"][0]["text"] += str(report["orderWebId"])
-                    row["columns"][1]["items"][0]["text"] += report["detectionCriterias"][-1]['description']
-                    # END ROW
-
-                    # ADD ROW TO CARD
-                    columnCard["content"]["body"].append(row)
-
-                    with open(f'{workingPath}/SRC/rowButton.json', 'r') as json_file:
-                        rowButton = json.load(json_file)
-                    rowButton["columns"][0]["items"][0]["actions"][0]["url"] = f"https://apps.cisco.com/qtc/viewstat/open.order?flow=nextgen&orderId={report['salesOrderNum']}"
-                    rowButton["columns"][0]["items"][0]["actions"][1]["card"]["body"] = detailCard["content"]["body"]
-
-                    columnCard["content"]["body"].append(rowButton)
-                    columnCard["content"]["body"].append(rowSeparator)
-            else:
-                noDropShipping.append(orderId)
-        except:
-            print("Nothing detected")
-            noDropShipping.append(orderId)
-
-    print("\n\n")
-
-    print(noDropShipping)
-    if(len(orderIds) != len(noDropShipping)):
-        sendCardToPersonId(token, data["data"]["personId"], columnCard)
-    else:
-        message = "No potential drop shipping was detected for order/s: " + ", ".join(noDropShipping)
-        #sendMessageToPersonId(token, data["data"]["personId"], message) 
-
-    if (noDropShipping):
-        message = "No potential drop shipping was detected for order/s: " + ", ".join(noDropShipping)
-        sendMessageToPersonId(token, data["data"]["personId"], message) 
-
+        deleteWebhook(token, webhookId)    
