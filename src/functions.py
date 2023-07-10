@@ -134,7 +134,6 @@ def initaliseDB(token):
 # Update the database
 def updateDB(token, previousWeeks):
     roomsId = getRoomsIdBot(token)
-    print("ROOMS ID =", roomsId)
     rooms = {}
     currentRoomsId = []
     for roomId, _ in previousWeeks.items() :
