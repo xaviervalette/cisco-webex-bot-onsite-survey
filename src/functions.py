@@ -109,6 +109,7 @@ def populateResultCard(resultCard, database, weekNumber, roomSize, listDays):
 
 # Get the list of days in French
 def getListDays():
+    listDays = []
     # Get the current date
     current_date = datetime.now().date()
 
@@ -134,9 +135,8 @@ def getListDays():
         formatted_date = next_date.strftime(f"{weekday_name} %d/%m")
         
         # Print the formatted date
-        print(formatted_date)
 
-        listDays.append(current_day.strftime("%A %d/%m"))
+        listDays.append(formatted_date)
 
     return listDays
 
