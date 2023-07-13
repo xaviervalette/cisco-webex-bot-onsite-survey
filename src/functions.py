@@ -109,16 +109,35 @@ def populateResultCard(resultCard, database, weekNumber, roomSize, listDays):
 
 # Get the list of days in French
 def getListDays():
-    listDays=[]
-    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
-    today = datetime.date.today()
+    # Get the current date
+    current_date = datetime.now().date()
 
-    # Get the Monday of the week after next
-    next_monday = today + datetime.timedelta(days=(0 - today.weekday())%7+7)
+    # Find the next Monday
+    days_ahead = (0 - current_date.weekday()) % 7
+    next_monday = current_date + timedelta(days=days_ahead)
 
+    # Define a list of weekdays
+    weekdays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
+
+    # Iterate over the next seven days starting from next Monday
     for i in range(5):
-        current_day = next_monday + datetime.timedelta(days=i)
+        # Calculate the date for the current day
+        next_date = next_monday + timedelta(days=i)
+        
+        # Get the weekday index (0-6) for the current day
+        weekday_index = next_date.weekday()
+        
+        # Get the weekday name from the weekdays list
+        weekday_name = weekdays[weekday_index]
+        
+        # Format the date as "weekday day/month"
+        formatted_date = next_date.strftime(f"{weekday_name} %d/%m")
+        
+        # Print the formatted date
+        print(formatted_date)
+
         listDays.append(current_day.strftime("%A %d/%m"))
+
     return listDays
 
 # Populate the survey card with data
