@@ -25,7 +25,6 @@ sendCardWebhookUrl = config["baseWebhookUrl"]+config["sendCardWebhookPath"]
 getCardSubmissionUrl = config["baseWebhookUrl"]+config["getCardSubmissionPath"]
 getDetailUrl = config["baseWebhookUrl"]+"details"
 
-response = createWebhook("sendCard", sendCardWebhookUrl, "messages", "", config["botToken"])
 response = createWebhook("getDetail", getDetailUrl, "attachmentActions", "", config["botToken"])
 status_code = 0
 while status_code != 200:
