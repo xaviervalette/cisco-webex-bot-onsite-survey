@@ -44,10 +44,8 @@ def webhookGet():
 
     if request.method == 'POST':
 
-        #GET INPUTS FROM WEBEX
-        my_date = datetime.date.today()
-        _, weekNum, _ = my_date.isocalendar()
-        data = request.json
+        weekNum = getWeekNum()
+        data = request.json()
         attachement = getAttachement(config["botToken"], data["data"]["id"])
         
         # READ DATABASE

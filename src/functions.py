@@ -5,6 +5,12 @@ from datetime import datetime, timedelta
 
 baseUrl = "https://webexapis.com/v1/"
 
+# Get week number
+def getWeekNum():
+    my_date = datetime.date.today()
+    _, weekNum, _ = my_date.isocalendar()
+    return weekNum
+
 # Broadcast survey card to all rooms
 def broadcastSurveyCard(token, surveyCard):
     listDays = []
