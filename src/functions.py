@@ -1,13 +1,13 @@
 import json
 import requests
 import locale
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 baseUrl = "https://webexapis.com/v1/"
 
 # Get week number
 def getWeekNum():
-    my_date = datetime.date.today()
+    my_date = date.today()
     _, weekNum, _ = my_date.isocalendar()
     return weekNum
 
@@ -27,7 +27,7 @@ def broadcastResultCard(token, resultCard):
     listDays = []
     listDays = getListDays()
 
-    my_date = datetime.date.today()
+    my_date = date.today()
     _, weekNum, _ = my_date.isocalendar()
 
     with open('data/answers.json', 'r') as openfile:
