@@ -45,7 +45,7 @@ def webhookGet():
     if request.method == 'POST':
 
         weekNum = getWeekNum()
-        data = request.json()
+        data = request.json
         attachement = getAttachement(config["botToken"], data["data"]["id"])
         
         # READ DATABASE
