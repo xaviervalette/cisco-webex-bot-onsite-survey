@@ -87,7 +87,7 @@
             },
             {
             "type": "TextBlock",
-            "text": "Veuillez répondre avant 18h",
+            "text": "Veuillez répondre avant 17h",
             "wrap": true,
             "color": "Attention",
             "weight": "Bolder",
