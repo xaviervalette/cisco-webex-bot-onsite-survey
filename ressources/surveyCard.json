@@ -84,7 +84,17 @@
                 ],
                 "horizontalAlignment": "Center",
                 "spacing": "Large"
-            }
+            },
+            {
+            "type": "TextBlock",
+            "text": "Veuillez répondre avant 18h",
+            "wrap": true,
+            "color": "Attention",
+            "weight": "Bolder",
+            "isSubtle": true,
+            "size": "Small",
+            "horizontalAlignment": "Center"
+        }
         ],
         "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
         "version": "1.3"
